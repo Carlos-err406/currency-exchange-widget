@@ -21,6 +21,7 @@
     "@tailwindcss/vite": "^4.1.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dayjs": "^1.11.18",
     "lucide-react": "^0.476.0",
     "next-themes": "^0.4.6",
     "node-window-manager": "^2.2.4",

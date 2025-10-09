@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "YourAppID",
   "asar": true,
-  "productName": "Electron Playstuff",
+  "productName": "Currency Exchange Widget",
   "compression": "maximum",
   "removePackageScripts": true,
   "directories": {
@@ -10,7 +10,8 @@
   },
   "files": [
     "dist",
-    "dist-electron"
+    "dist-electron",
+    "data"
   ],
   "mac": {
     "target": [

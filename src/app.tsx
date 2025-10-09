@@ -1,6 +1,7 @@
 import { DollarSign } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from './components/ui/button';
+import { getDailyImageUrl } from './lib/services/daily-image';
 import {
   setWidgetSize,
   widgetDragMove,
@@ -13,6 +14,7 @@ export default function App() {
   const [open, setOpen] = useState(false);
   const [scaled, setScaled] = useState(false);
   const [origin, setOrigin] = useState({ x: 50, y: 50 });
+  const [imageSrc, setImageSrc] = useState('https://wa.cambiocuba.money/trmi.png');
   const dragging = useRef(false);
 
   useEffect(() => {
@@ -41,6 +43,19 @@ export default function App() {
       setTimeout(() => setWidgetSize(36, 36), 200);
     }
   }, [open]);
+
+  useEffect(() => {
+    const fetchImagePath = async () => {
+      try {
+        const [err, path] = await getDailyImageUrl();
+        if (err) throw err;
+        setImageSrc(path);
+      } catch (error) {
+        console.error('Failed to get image path:', error);
+      }
+    };
+    fetchImagePath();
+  }, []);
 
   const startDrag = (e: React.MouseEvent) => {
     if (e.button !== 1 && !e.altKey) return; // right-click drag
@@ -79,7 +94,7 @@ export default function App() {
       <div className="overflow-clip rounded-2xl">
         <img
           onClick={handleImageClick}
-          src="https://wa.cambiocuba.money/trmi.png"
+          src={imageSrc}
           style={{
             transformOrigin: `${origin.x}% ${origin.y}%`,
             transform: !open ? 'scale(0)' : scaled ? 'scale(2)' : 'scale(1)',

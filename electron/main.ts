@@ -53,7 +53,7 @@ function createWindow() {
   }
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   createWindow();
   registerIPCs(ipcMain, widget);
 });
