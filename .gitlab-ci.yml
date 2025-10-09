@@ -1,0 +1,24 @@
+# stages:
+#   - pack
+
+# pack:
+#   stage: pack
+#   tags:
+#     - electron-test
+#   before_script:
+#     - node --version
+#     - npm --version
+#     - npm ci
+#   script:
+#     - npm run build
+#     - Compress-Archive -Path "release/*/*Setup.exe" -DestinationPath "electronplaystuff-installer.zip" -CompressionLevel Optimal
+#   artifacts:
+#     paths:
+#       - electronplaystuff-installer.zip
+#     expire_in: 1 week
+#     when: always
+#   cache:
+#     key: "$CI_COMMIT_REF_SLUG"
+#     paths:
+#       - node_modules/
+#       - .npm/
