@@ -1,5 +1,6 @@
 export const RESIZE_WINDOW_CHANNEL = 'window_resize';
 export const MOVE_WINDOW_CHANNEL = 'window_move';
+export const GET_WINDOW_POSITION_CHANNEL = 'window_get_position';
 
 export const DRAG_START_CHANNEL = 'window_drag_start';
 export const DRAG_END_CHANNEL = 'window_drag_end';

@@ -5,6 +5,11 @@ export const setWidgetSize = async (width: number, height: number) => {
   console.log(result);
 };
 
+export const getWidgetPosition = async (): Promise<[number, number]> => {
+  const result = await IPC.window_get_position();
+  return result;
+};
+
 export const widgetStartDrag = async () => {
   const result = await IPC.window_drag_start();
   console.log(result);
