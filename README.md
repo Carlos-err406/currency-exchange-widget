@@ -1,17 +1,16 @@
-Electron
-React
-Vite
-Tailwindcss v4
-Shadcn UI
-Tanstack Router
-PNPM
+# Currency Exchange Widget
 
-# TODO
+A modern Electron desktop application for currency exchange built with React, TypeScript, and Tailwind CSS.
 
-- allow color customization
-- import images
-- v2 editor - maybe not make one from scratch?
-  - **obsidian uses CodeMirror**
-    - [[https://github.com/codemirror]]
-    - [[https://github.com/codemirror/lang-markdown]]
-  - **obsidian uses [markdown-it](https://github.com/markdown-it/markdown-it)** for markdown parsing
+## 🚀 Features
+
+- Real-time currency exchange rates
+- Clean, modern UI with dark/light theme support
+- Cross-platform desktop application
+- Built with modern web technologies
+
+## 📦 Download
+
+Download the latest release from the [Releases page](https://github.com/Carlos-err406/currency-exchange-widget/releases).
+
+The installer is provided as a compressed zip file for Windows.
