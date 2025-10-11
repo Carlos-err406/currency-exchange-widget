@@ -38,24 +38,24 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (open) setWidgetSize(500, 560);
-    else {
+    if (open) {
+      const fetchImagePath = async () => {
+        try {
+          const [err, path] = await getDailyImageUrl();
+          if (err) throw err;
+          setImageSrc(path);
+        } catch (error) {
+          console.error('Failed to get image path:', error);
+        }
+      };
+
+      fetchImagePath().then(() => {
+        setWidgetSize(500, 560);
+      });
+    } else {
       setTimeout(() => setWidgetSize(36, 36), 200);
     }
   }, [open]);
-
-  useEffect(() => {
-    const fetchImagePath = async () => {
-      try {
-        const [err, path] = await getDailyImageUrl();
-        if (err) throw err;
-        setImageSrc(path);
-      } catch (error) {
-        console.error('Failed to get image path:', error);
-      }
-    };
-    fetchImagePath();
-  }, []);
 
   const startDrag = (e: React.MouseEvent) => {
     if (e.button !== 1 && !e.altKey) return; // right-click drag
@@ -75,7 +75,7 @@ export default function App() {
     <div
       onMouseDown={startDrag}
       onContextMenu={(e) => e.preventDefault()}
-      className="h-screen w-screen absolute flex overflow-clip bg-transparent select-none"
+      className="h-screen w-screen absolute flex overflow-clip bg-transparent select-none gap-2"
     >
       <Button
         type="button"

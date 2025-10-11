@@ -24,7 +24,14 @@ export default defineConfig({
         vite: {
           build: {
             rollupOptions: {
-              external: ['node-window-manager', 'extract-file-icon', /\.node$/],
+              external: [
+                'node-window-manager',
+                'ffi-napi',
+                'ref-napi',
+                'extract-file-icon',
+                'electron-edge-js',
+                /\.node$/,
+              ],
             },
           },
           resolve: {
@@ -42,7 +49,14 @@ export default defineConfig({
         vite: {
           build: {
             rollupOptions: {
-              external: ['node-window-manager', 'extract-file-icon', /\.node$/],
+              external: [
+                'node-window-manager',
+                'ffi-napi',
+                'ref-napi',
+                'extract-file-icon',
+                'electron-edge-js',
+                /\.node$/,
+              ],
             },
           },
           resolve: {

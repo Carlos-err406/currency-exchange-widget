@@ -3,7 +3,6 @@ import fs from 'fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import registerIPCs from './ipc/register';
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 process.env.APP_ROOT = path.join(__dirname, '..');
@@ -40,7 +39,7 @@ function createWindow() {
     center: true,
     maximizable: false,
     webPreferences: {
-      devTools: true,
+      devTools: false,
       nodeIntegration: true,
       enableWebSQL: false,
       preload: path.join(__dirname, 'preload.mjs'),
@@ -53,29 +52,25 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     widget.loadFile(path.join(RENDERER_DIST, 'index.html'));
   }
+
+  return widget;
 }
 
-function createTray() {
+function createTray(widget: BrowserWindow) {
   tray = new Tray(path.join(process.env.VITE_PUBLIC, 'logo192.png'));
   const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Show Widget',
-      click: () => {
-        widget?.show();
-      },
-    },
+    { label: 'Show Widget', click: () => widget.showInactive() },
     { label: 'Quit', click: () => app.quit() },
   ]);
   tray.setToolTip('Currency Exchange Widget');
   tray.setContextMenu(contextMenu);
   tray.on('click', () => {
-    if (!widget) return;
-    widget.isVisible() ? widget.hide() : widget.show();
+    widget.isVisible() ? widget.hide() : widget.showInactive();
   });
 }
 
 app.whenReady().then(async () => {
-  createWindow();
-  createTray();
+  const widget = createWindow();
+  createTray(widget);
   registerIPCs(ipcMain, widget);
 });
