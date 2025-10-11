@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: release/**/*.exe
+          path: release/**/*Setup.exe
           if-no-files-found: error
 
   create-release:
