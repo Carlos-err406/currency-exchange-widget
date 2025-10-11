@@ -38,11 +38,18 @@ jobs:
         env:
           CI: true
 
+      - name: Compress installer
+        run: |
+          $setupFile = Get-ChildItem -Path "release" -Filter "*Setup.exe" -Recurse | Select-Object -First 1
+          $zipName = $setupFile.Name -replace '\.exe$', '.zip'
+          Compress-Archive -Path $setupFile.FullName -DestinationPath "release/$zipName" -CompressionLevel Optimal
+        shell: powershell
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: release/**/*Setup.exe
+          path: release/**/*.zip
           if-no-files-found: error
 
   create-release:
