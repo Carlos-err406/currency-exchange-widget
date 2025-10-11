@@ -12,7 +12,8 @@
     "build": "tsc && vite build && electron-builder --config electron-builder.json5",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@radix-ui/react-popover": "^1.1.15",
@@ -41,7 +42,7 @@
     "@vitejs/plugin-react": "^4.2.1",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
-    "electron-rebuild": "^3.2.9",
+
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^26.0.0",
