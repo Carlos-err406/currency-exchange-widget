@@ -4,7 +4,7 @@ A modern Electron desktop application for currency exchange built with React, Ty
 
 ## 🚀 Features
 
-- Real-time currency exchange rates
+- Real-time currency exchange rates from ElTOQUE
 - Clean, modern UI with dark/light theme support
 - Cross-platform desktop application
 - Built with modern web technologies
