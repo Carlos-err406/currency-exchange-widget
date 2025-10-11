@@ -8,6 +8,7 @@
   "directories": {
     "output": "release/${version}"
   },
+  "publish": "never",
   "files": [
     "dist",
     "dist-electron",
