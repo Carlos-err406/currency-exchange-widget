@@ -16,7 +16,7 @@ jobs:
       - name: Setup Windows environment
         run: |
           git config --global core.longpaths true
-          npm config set script-shell powershell
+          npm config set script-shell cmd
 
       - name: Install Node.js
         uses: actions/setup-node@v4
