@@ -1,5 +1,5 @@
 {
-  "name": "electron-playstuff",
+  "name": "currency-exchange-widget",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -18,12 +18,10 @@
   "dependencies": {
     "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-slot": "^1.2.3",
-    "@radix-ui/react-tooltip": "^1.2.8",
     "@tailwindcss/vite": "^4.1.13",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.18",
-    "electron-edge-js": "^38.0.0",
     "lucide-react": "^0.476.0",
     "next-themes": "^0.4.6",
     "react": "^18.2.0",
@@ -42,7 +40,6 @@
     "@vitejs/plugin-react": "^4.2.1",
     "electron": "^30.0.1",
     "electron-builder": "^24.13.3",
-
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^26.0.0",

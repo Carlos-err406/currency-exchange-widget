@@ -1,35 +1,33 @@
 {
-  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  "appId": "YourAppID",
-  "asar": true,
-  "productName": "Currency Exchange Widget",
-  "compression": "maximum",
-  "removePackageScripts": true,
-  "directories": {
-    "output": "release/${version}"
+  $schema: 'https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json',
+  appId: 'YourAppID',
+  asar: true,
+  productName: 'Currency Exchange Widget',
+  compression: 'maximum',
+  removePackageScripts: true,
+  directories: {
+    output: 'release/${version}',
   },
-  "files": [
-    "dist",
-    "dist-electron",
-    "data"
-  ],
-
-  "win": {
-    "target": [
+  files: ['dist', 'dist-electron', 'data'],
+  win: {
+    target: [
       {
-        "target": "nsis",
-        "arch": [
-          "x64"
-        ]
-      }
+        target: 'nsis',
+        arch: ['x64'],
+      },
     ],
-    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
+    artifactName: '${productName}-Windows-${version}-Setup.${ext}',
   },
-  "nsis": {
-    "oneClick": false,
-    "perMachine": false,
-    "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
+  nsis: {
+    oneClick: false,
+    perMachine: true,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+    createDesktopShortcut: true,
+    createStartMenuShortcut: true,
+    runAfterFinish: true,
+    menuCategory: 'Utilities',
+    include: 'build/installer.nsh',
+    warningsAsErrors: false,
   },
-
 }
