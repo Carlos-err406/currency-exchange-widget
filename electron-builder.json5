@@ -5,6 +5,7 @@
   "productName": "Currency Exchange Widget",
   "compression": "maximum",
   "removePackageScripts": true,
+  "icon": "public/logo256.png",
   "directories": {
     "output": "dist-release"
   },
