@@ -34,7 +34,7 @@ jobs:
           npm_config_prefer_offline: true
 
       - name: Build application
-        run: npm run build
+        run: npm run build:release
         env:
           CI: true
 
