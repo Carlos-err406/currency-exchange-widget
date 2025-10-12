@@ -40,16 +40,22 @@ jobs:
 
       - name: Compress installer
         run: |
-          $setupFile = Get-ChildItem -Path "release" -Filter "*Setup.exe" -Recurse | Select-Object -First 1
-          $zipName = $setupFile.Name -replace '\.exe$', '.zip'
-          Compress-Archive -Path $setupFile.FullName -DestinationPath "release/$zipName" -CompressionLevel Optimal
+          $setupFile = Get-ChildItem -Path "dist-release" -Filter "*Setup.exe" -Recurse | Select-Object -First 1
+          if ($setupFile) {
+            $zipName = $setupFile.Name -replace '\.exe', '.zip'
+            Compress-Archive -Path $setupFile.FullName -DestinationPath "dist-release/$zipName" -CompressionLevel Optimal
+            Write-Host "Created: $zipName"
+          } else {
+            Write-Error "No setup file found"
+            exit 1
+          }
         shell: powershell
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-windows
-          path: release/**/*.zip
+          path: dist-release/**/*.zip
           if-no-files-found: error
 
   create-release:
@@ -65,13 +71,19 @@ jobs:
         with:
           path: artifacts
 
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             artifacts/**/*
+          name: Release v${{ steps.version.outputs.VERSION }}
+          tag_name: ${{ github.ref_name }}
           generate_release_notes: true
           draft: false
-          prerelease: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
