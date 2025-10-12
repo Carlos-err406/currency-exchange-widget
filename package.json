@@ -10,7 +10,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && electron-builder --config electron-builder.json5 --publish=never",
-    "build:release": "tsc && vite build && electron-builder --config electron-builder.json5 --publish=always",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "format": "prettier --write .",
