@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
@@ -55,7 +54,7 @@ code {
   --sidebar-ring: oklch(0.871 0.006 286.286);
   /* CUSTOM VARIABLES */
   --h-header: 64px;
-  --h-sidebar-footer: 40px
+  --h-sidebar-footer: 40px;
 }
 
 .dark {
@@ -138,34 +137,5 @@ code {
   }
   body {
     @apply bg-background text-foreground;
-  }
-
-  /* Custom scrollbar styles */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    width: 8px;
-    height: 8px;
-    background-color: var(--color-primary);
-    border-radius: var(--radius);
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    cursor: grab;
-  }
-
-  ::-webkit-scrollbar-thumb:active {
-    cursor: grabbing;
-  }
-
-  ::-webkit-scrollbar-corner {
-    background: transparent;
   }
 }

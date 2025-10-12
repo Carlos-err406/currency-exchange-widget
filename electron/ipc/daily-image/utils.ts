@@ -1,2 +1,1 @@
-export const log: typeof console.log = (...args) =>
-  console.log('[DAILY IMAGE]:', ...args);
+export const log: typeof console.log = (...args) => console.log('[DAILY IMAGE]:', ...args);

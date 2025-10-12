@@ -1,7 +1,8 @@
 import $try from '@utils/try';
 import { type BrowserWindow, screen } from 'electron';
-import fs from 'fs';
 import { IPCRegisterFunction } from '../types';
+
+import { saveWindowPosition } from '../../lib/config';
 import {
   DRAG_END_CHANNEL,
   DRAG_MOVE_CHANNEL,
@@ -10,7 +11,6 @@ import {
   RESIZE_WINDOW_CHANNEL,
 } from './channels';
 import { log } from './utils';
-
 let dragging = false;
 let startCursor: { x: number; y: number } | null = null;
 let startWindow: { x: number; y: number } | null = null;
@@ -26,7 +26,12 @@ export const onResize = async (widget: BrowserWindow | null, width: number, heig
     if (widget) {
       const [currentX, currentY] = widget.getPosition();
       const primaryDisplay = screen.getPrimaryDisplay();
-      const { x: screenX, y: screenY, width: screenWidth, height: screenHeight } = primaryDisplay.bounds;
+      const {
+        x: screenX,
+        y: screenY,
+        width: screenWidth,
+        height: screenHeight,
+      } = primaryDisplay.bounds;
 
       let newX = currentX;
       let newY = currentY;
@@ -63,11 +68,14 @@ const onDragStart = (widget: BrowserWindow | null) => {
   dragging = true;
 };
 
-const onDragEnd = (widget: BrowserWindow | null) => {
+const onDragEnd = async (widget: BrowserWindow | null) => {
   if (!widget) return;
   log('Drag end');
   const [winX, winY] = widget.getPosition();
-  fs.writeFileSync('data/pos.json', JSON.stringify({ x: winX, y: winY }));
+
+  // Use the config system to save position
+  await saveWindowPosition({ x: winX, y: winY });
+
   dragging = false;
 };
 
@@ -79,7 +87,12 @@ const onDragMove = (widget: BrowserWindow | null) => {
   log(`Drag move ${dx} x ${dy}`);
 
   const primaryDisplay = screen.getPrimaryDisplay();
-  const { x: screenX, y: screenY, width: screenWidth, height: screenHeight } = primaryDisplay.bounds;
+  const {
+    x: screenX,
+    y: screenY,
+    width: screenWidth,
+    height: screenHeight,
+  } = primaryDisplay.bounds;
   const [winWidth, winHeight] = widget.getSize();
 
   let newX = startWindow.x + dx;

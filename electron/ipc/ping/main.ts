@@ -8,5 +8,4 @@ export const onPing = async () => {
   return $try(() => 'pong');
 };
 
-export const pingRegister: IPCRegisterFunction = (ipcMain) =>
-  ipcMain.handle(PING_CHANNEL, onPing);
+export const pingRegister: IPCRegisterFunction = (ipcMain) => ipcMain.handle(PING_CHANNEL, onPing);
