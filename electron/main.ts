@@ -16,6 +16,11 @@ let widget: BrowserWindow | null;
 // let tray: Tray | null;
 
 app.whenReady().then(async () => {
+  // Hide from dock on macOS
+  if (process.platform === 'darwin') {
+    app.dock.hide();
+  }
+
   const config = await getAppConfig();
 
   // Create window based on mode

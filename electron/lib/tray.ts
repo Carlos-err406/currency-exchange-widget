@@ -13,7 +13,6 @@ export function createTray(): Tray {
   const trayIcon = new Tray(path.join(getPublicPath(), 'trayTemplate.png'));
   let popup: BrowserWindow | null = null;
 
-
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Open', click: () => togglePopup() },
     { label: 'Quit', click: () => app.quit() },

@@ -9,30 +9,24 @@
   "directories": {
     "output": "dist-release"
   },
-  "files": [
-    "dist",
-    "dist-electron",
-    "data"
-  ],
+  "files": ["dist", "dist-electron", "data"],
   "win": {
     "target": [
       {
         "target": "nsis",
-        "arch": [
-          "x64"
-        ]
+        "arch": ["x64"]
       }
     ],
     "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
   },
   "mac": {
+    "extendInfo": {
+      "LSUIElement": true
+    },
     "target": [
       {
         "target": "dmg",
-        "arch": [
-          "x64",
-          "arm64"
-        ]
+        "arch": ["x64", "arm64"]
       }
     ],
     "artifactName": "${productName}-Mac-${version}-${arch}.${ext}",
