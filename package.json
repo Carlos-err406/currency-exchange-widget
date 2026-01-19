@@ -1,7 +1,7 @@
 {
   "name": "currency-exchange-widget",
   "private": true,
-  "version": "2.0.6",
+  "version": "2.0.7",
   "type": "module",
   "description": "Electron application with Vite + React+ TS + TailwindCSS + Tanstack Router + Shadcn/ui",
   "author": {
