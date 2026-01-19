@@ -10,8 +10,9 @@ export function createTray(): Tray {
     return process.env.VITE_PUBLIC || path.join(__dirname, '..', '..', 'public');
   };
 
-  const trayIcon = new Tray(path.join(getPublicPath(), 'logo256.png'));
+  const trayIcon = new Tray(path.join(getPublicPath(), 'trayTemplate.png'));
   let popup: BrowserWindow | null = null;
+
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Open', click: () => togglePopup() },
@@ -42,8 +43,10 @@ export function createTray(): Tray {
   };
 
   trayIcon.setToolTip('Currency Exchange Widget');
-  trayIcon.setContextMenu(contextMenu);
   trayIcon.on('click', togglePopup);
+  trayIcon.on('right-click', () => {
+    trayIcon.popUpContextMenu(contextMenu);
+  });
 
   return trayIcon;
 }
