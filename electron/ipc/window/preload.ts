@@ -4,11 +4,13 @@ import {
   DRAG_MOVE_CHANNEL,
   DRAG_START_CHANNEL,
   GET_WINDOW_POSITION_CHANNEL,
+  HIDE_WINDOW_CHANNEL,
   MOVE_WINDOW_CHANNEL,
   RESIZE_WINDOW_CHANNEL,
 } from './channels';
 
 export const windowInvokerFactory = (ipcRenderer: Electron.IpcRenderer) => ({
+  [HIDE_WINDOW_CHANNEL]: () => ipcRenderer.invoke(HIDE_WINDOW_CHANNEL),
   [RESIZE_WINDOW_CHANNEL]: ((...args) => ipcRenderer.invoke(RESIZE_WINDOW_CHANNEL, ...args)) as (
     w: number,
     h: number

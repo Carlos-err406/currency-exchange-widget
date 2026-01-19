@@ -1,5 +1,5 @@
+import { BrowserWindow, screen } from 'electron';
 import $try from '@utils/try';
-import { type BrowserWindow, screen } from 'electron';
 import { IPCRegisterFunction } from '../types';
 
 import { saveWindowPosition } from '../../lib/config';
@@ -8,6 +8,7 @@ import {
   DRAG_MOVE_CHANNEL,
   DRAG_START_CHANNEL,
   GET_WINDOW_POSITION_CHANNEL,
+  HIDE_WINDOW_CHANNEL,
   RESIZE_WINDOW_CHANNEL,
 } from './channels';
 import { log } from './utils';
@@ -112,4 +113,8 @@ export const windowRegister: IPCRegisterFunction = (ipcMain, widget) => {
   ipcMain.handle(DRAG_START_CHANNEL, () => onDragStart(widget));
   ipcMain.handle(DRAG_END_CHANNEL, () => onDragEnd(widget));
   ipcMain.handle(DRAG_MOVE_CHANNEL, () => onDragMove(widget));
+  ipcMain.handle(HIDE_WINDOW_CHANNEL, (event) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (win) win.hide();
+  });
 };

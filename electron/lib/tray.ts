@@ -18,11 +18,18 @@ export function createTray(): Tray {
     { label: 'Quit', click: () => app.quit() },
   ]);
 
+  let lastHideTime = 0;
   const togglePopup = () => {
+    // Prevent double-toggle when clicking tray to close
+    if (Date.now() - lastHideTime < 300) {
+      return;
+    }
+
     // If popup exists and is not destroyed
     if (popup && !popup.isDestroyed()) {
       if (popup.isVisible()) {
         popup.hide();
+        lastHideTime = Date.now();
       } else {
         popup.show();
       }
@@ -36,6 +43,13 @@ export function createTray(): Tray {
     // Set up event listeners only once when creating
     popup.on('closed', () => {
       popup = null;
+    });
+
+    popup.on('blur', () => {
+      if (popup && !popup.isDestroyed() && popup.isVisible()) {
+        popup.hide();
+        lastHideTime = Date.now();
+      }
     });
 
     // Popup is already visible from creation

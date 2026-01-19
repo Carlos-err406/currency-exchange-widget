@@ -4,9 +4,10 @@ import { cn } from '../lib/utils';
 
 interface CurrencyImageProps {
   className?: string;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
-export function CurrencyImage({ className }: CurrencyImageProps) {
+export function CurrencyImage({ className, onClick }: CurrencyImageProps) {
   const [imageSrc, setImageSrc] = useState('https://wa.cambiocuba.money/trmi.png');
 
   useEffect(() => {
@@ -24,7 +25,7 @@ export function CurrencyImage({ className }: CurrencyImageProps) {
   }, []);
 
   return (
-    <div className={cn('overflow-clip rounded-2xl', className)}>
+    <div className={cn('overflow-clip rounded-2xl', className)} onClick={onClick}>
       <img src={imageSrc} className="size-full select-none" alt="Daily currency exchange rates" />
     </div>
   );
