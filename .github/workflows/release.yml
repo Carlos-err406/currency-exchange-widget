@@ -2,104 +2,58 @@ name: Release
 
 on:
   push:
-    tags:
-      - 'v*'
+    tags: ['v*']
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v4
-
-      - name: Setup Windows environment
-        run: |
-          git config --global core.longpaths true
-          npm config set script-shell cmd
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build application
-        run: npm run build
-        env:
-          CI: true
-
-      - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-windows
-          path: dist-release/*.exe
-          if-no-files-found: error
-
-  build-macos:
+  release:
     runs-on: macos-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      RELEASE_TAG: ${{ github.ref_name }}
     steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v4
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build application
-        run: npm run build
-        env:
-          CI: true
-
-      - name: Upload macOS artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-macos
-          path: dist-release/*.dmg
-          if-no-files-found: error
-
-  create-release:
-    needs: [build-windows, build-macos]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v4
-
-      - name: Download Windows artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: release-windows
-          path: release-artifacts
-
-      - name: Download macOS artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: release-macos
-          path: release-artifacts
-
-      - name: Extract version from tag
-        id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            release-artifacts/**/*
-          name: Release v${{ steps.version.outputs.VERSION }}
-          tag_name: ${{ github.ref_name }}
-          generate_release_notes: true
-          draft: false
-          prerelease: ${{ contains(github.ref_name, '-') }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          python-version: '3.x'
+      - run: make check
+      - name: Package version-pinned installer and checksums
+        run: ./scripts/package-release.sh "$RELEASE_TAG"
+      - name: Verify packaged installer
+        run: |
+          cd "dist/$RELEASE_TAG"
+          shasum -a 256 -c SHA256SUMS
+          ./install.sh "$RUNNER_TEMP/currency-exchange-install-smoke"
+          cmp currency-exchange.1h.sh "$RUNNER_TEMP/currency-exchange-install-smoke/currency-exchange.1h.sh"
+      - name: Create draft with all assets
+        run: |
+          # Never overwrite an existing release, including on a workflow retry.
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo 'Release already exists. Inspect any failed draft, or use a new version for a published release.' >&2
+            exit 1
+          fi
+          args=()
+          if [[ "$RELEASE_TAG" == *-* ]]; then args+=(--prerelease); fi
+          gh release create "$RELEASE_TAG" --verify-tag --draft --generate-notes \
+            --title "Currency Exchange $RELEASE_TAG" "${args[@]}" \
+            "dist/$RELEASE_TAG/currency-exchange.1h.sh" \
+            "dist/$RELEASE_TAG/install.sh" "dist/$RELEASE_TAG/README.md" \
+            "dist/$RELEASE_TAG/SHA256SUMS" "dist/$RELEASE_TAG/currency-exchange-$RELEASE_TAG.tar.gz"
+      - name: Verify uploaded assets
+        run: |
+          gh release download "$RELEASE_TAG" --dir "$RUNNER_TEMP/currency-exchange-release"
+          cd "$RUNNER_TEMP/currency-exchange-release"
+          shasum -a 256 -c SHA256SUMS
+      - name: Publish verified release
+        run: |
+          latest=true
+          if [[ "$RELEASE_TAG" == *-* ]]; then latest=false; fi
+          gh release edit "$RELEASE_TAG" --draft=false --latest="$latest"

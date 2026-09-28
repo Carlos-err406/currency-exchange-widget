@@ -1,33 +1,11 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.idea
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-.nitro
-.tanstack
-.env
-release/
+.preview-cache/
+__pycache__/
+*.pyc
+dist/
+# Local artifacts left over from the former Electron app.
+node_modules/
 dist-electron/
 dist-release/
-
-data/
-
-vite.config.*.timestamp*.mjs
+.env
+*.log
