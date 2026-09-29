@@ -23,7 +23,7 @@ The rates shown in these screenshots are a snapshot, not live data.
 - **Compact footer:** an **Updated** timestamp and a right-aligned, icon-only refresh button.
 - **Hourly updates:** downloads the source image at startup and every hour.
 - **Manual refresh:** use the footer icon or the menu's **Refresh now** action.
-- **Offline cache:** keeps the last valid image when a download fails, with a visible warning.
+- **Offline cache:** keeps the last valid image when a download fails.
 - **Light and dark appearance:** follows macOS without altering the source chart.
 - **Simple installation:** one script, using tools already included with macOS.
 
@@ -87,8 +87,8 @@ publication time of the exchange rates; that date is printed in the chart itself
 
 ### When a refresh fails
 
-A warning appears beside the menu bar icon and above the cached chart. The last
-valid image remains available, and its timestamp stays unchanged. If there is no
+The popup keeps showing the last valid image without a warning. Its **Updated**
+timestamp stays unchanged, so an old time means the refresh failed. If there is no
 saved image yet, the popup shows an unavailable state with retry instructions.
 
 Downloads have a 15-second timeout and a 5 MiB limit. HTTP errors, invalid PNGs,
@@ -102,8 +102,8 @@ and oversized responses do not replace the cached image.
   is in its configured plugin folder and enabled.
 - **The chart looks unchanged after refreshing:** reopen the popup, then check
   the publication date on the chart. The provider may still be serving the same image.
-- **A refresh warning is visible:** check your connection and try the refresh button
-  again. The warning does not remove the last valid chart.
+- **The Updated time is old:** check your connection and try the refresh button
+  again. A failed refresh does not remove the last valid chart.
 
 ## Development
 
@@ -147,10 +147,10 @@ The version lives in the plugin's `xbar.version` metadata. Build matching releas
 artifacts locally with:
 
 ```sh
-./scripts/package-release.sh v3.0.0
+./scripts/package-release.sh v3.0.1
 ```
 
-Artifacts are written to `dist/v3.0.0/`. Pushing a matching `v*` tag triggers the
+Artifacts are written to `dist/v3.0.1/`. Pushing a matching `v*` tag triggers the
 release workflow, which:
 
 1. Runs the macOS checks and verifies the tag matches the plugin version.

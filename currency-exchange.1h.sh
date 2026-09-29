@@ -1,6 +1,6 @@
 #!/bin/bash
 # <xbar.title>Currency Exchange</xbar.title>
-# <xbar.version>v3.0.0</xbar.version>
+# <xbar.version>v3.0.1</xbar.version>
 # <xbar.author>Carlos Daniel Vilaseca Illnait</xbar.author>
 # <xbar.author.github>Carlos-err406</xbar.author.github>
 # <xbar.desc>ElTOQUE's daily exchange-rate image in a menu bar popup, with an offline cache.</xbar.desc>
@@ -18,7 +18,7 @@ TRAY_ICON='iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAAAXNSR0IArs4c6QAAAERlW
 CACHE_DIR="${SWIFTBAR_PLUGIN_CACHE_PATH:-${HOME}/Library/Caches/currency-exchange-widget}"
 
 error_menu() {
-  printf '%s\n' "⚠ | templateImage=$TRAY_ICON width=18 height=18" '---' "$1" \
+  printf '%s\n' "  | templateImage=$TRAY_ICON width=18 height=18" '---' "$1" \
     'Refresh now | refresh=true' "Open source image | href=$SOURCE_URL"
 }
 
@@ -47,7 +47,6 @@ valid_image() {
   (( width > 0 && height > 0 && width <= 10000 && height <= 10000 ))
 }
 
-offline=false
 if curl --fail --silent --show-error --location --proto '=https' --proto-redir '=https' \
   --connect-timeout 5 --max-time 15 --max-filesize 5242880 \
   --output "$WORK_DIR/download.png" "$SOURCE_URL" && valid_image "$WORK_DIR/download.png"; then
@@ -55,14 +54,11 @@ if curl --fail --silent --show-error --location --proto '=https' --proto-redir '
   cp "$WORK_DIR/download.png" "$WORK_DIR/cache.png"
   mv -f "$WORK_DIR/cache.png" "$CACHE_DIR/rates.png"
 else
-  offline=true
   printf '%s\n' 'Currency Exchange: refresh failed; using the last valid image if available.' >&2
 fi
 
 image_html='<section class="empty"><h1>Rates unavailable</h1><p>Check your connection, then right-click the menu bar icon and choose Refresh now.</p></section>'
 status='No saved image yet'
-notice=''
-title=' '
 if [[ -f "$CACHE_DIR/rates.png" ]]; then
   cp -p "$CACHE_DIR/rates.png" "$WORK_DIR/snapshot.png"
   if valid_image "$WORK_DIR/snapshot.png"; then
@@ -70,10 +66,6 @@ if [[ -f "$CACHE_DIR/rates.png" ]]; then
     status="Updated $downloaded"
     image_html="<img src=\"data:image/png;base64,$(base64 < "$WORK_DIR/snapshot.png" | tr -d '\r\n')\" alt=\"ElTOQUE daily currency exchange-rate chart\">"
   fi
-fi
-if [[ "$offline" == true ]]; then
-  title='⚠'
-  notice='<p class="notice">Could not refresh. Any saved image below may be out of date.</p>'
 fi
 
 # Inline the image so WebKit does not need access to adjacent files or a server.
@@ -95,15 +87,13 @@ footer p { margin: 0; }
 .refresh:hover { background: rgba(128, 128, 128, .18); }
 .refresh:active { background: rgba(128, 128, 128, .28); }
 .refresh:focus-visible { outline: 2px solid #3885c5; outline-offset: 1px; }
-.notice { margin: 0; padding: 12px 16px; background: #fff1cb; color: #634600; line-height: 1.5; }
 .empty { padding: 70px 32px; text-align: center; line-height: 1.6; }
 h1 { font-size: 20px; font-weight: 600; }
 @media (prefers-color-scheme: dark) {
   :root { color: #e3e3e3; background: #202020; }
-  .notice { background: #40351b; color: #ffe1a0; }
 }
 </style></head>
-<body><main>$notice$image_html<footer><p>$status</p><a class="refresh" href="swiftbar://refreshplugin?name=currency-exchange.1h.sh" aria-label="Refresh rates" title="Refresh rates"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5"/><path d="M19.5 12a7.5 7.5 0 1 0-2 5.1M20 12l-3-3"/></svg></a></footer></main></body></html>
+<body><main>$image_html<footer><p>$status</p><a class="refresh" href="swiftbar://refreshplugin?name=currency-exchange.1h.sh" aria-label="Refresh rates" title="Refresh rates"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5"/><path d="M19.5 12a7.5 7.5 0 1 0-2 5.1M20 12l-3-3"/></svg></a></footer></main></body></html>
 HTML
 mv -f "$WORK_DIR/popup.html" "$CACHE_DIR/popup.html"
 
@@ -120,6 +110,6 @@ file_url() {
   done
 }
 popup_url=$(file_url "$(cd "$CACHE_DIR" && pwd -P)/popup.html")
-printf '%s\n' "$title | templateImage=$TRAY_ICON width=18 height=18 tooltip='Currency Exchange' href=$popup_url webview=true webvieww=500 webviewh=510" \
+printf '%s\n' "  | templateImage=$TRAY_ICON width=18 height=18 tooltip='Currency Exchange' href=$popup_url webview=true webvieww=500 webviewh=510" \
   '---' "$status" 'Refresh now | refresh=true' "Open source image | href=$SOURCE_URL" \
   'ElTOQUE | href=https://eltoque.com/'

@@ -76,11 +76,11 @@ exit 2
         image = self.cache / 'rates.png'
         os.utime(image, (1700000000, 1700000000))
         output = self.run_plugin(FAIL_DOWNLOAD='1')
-        self.assertIn('⚠', output.splitlines()[0])
+        self.assertNotIn('⚠', output.splitlines()[0])
         self.assertEqual(image.read_bytes(), png())
         self.assertEqual(image.stat().st_mtime, 1700000000)
         self.assertIn('2023', self.html())
-        self.assertIn('may be out of date', self.html())
+        self.assertNotIn('may be out of date', self.html())
         self.assertIn('data:image/png;base64,', self.html())
 
     def test_first_run_offline(self):
@@ -94,7 +94,7 @@ exit 2
         self.fixture.write_text('<html>Service unavailable</html>')
         self.run_plugin()
         self.assertEqual((self.cache / 'rates.png').read_bytes(), png())
-        self.assertIn('may be out of date', self.html())
+        self.assertNotIn('may be out of date', self.html())
 
     def test_oversized_response_is_rejected(self):
         self.fixture.write_bytes(png() + b'\0' * 5242880)
